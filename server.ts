@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import 'reflect-metadata';
@@ -26,6 +26,10 @@ app.use(
         extended: true
     })
 );
+
+app.get('/test', (req: Request, res: Response, next: NextFunction) => {
+    res.json({test: 'test'})
+})
 
 let module_dirname = path.join(__dirname, 'src/modules');
 fs.readdirSync(module_dirname).forEach(function (module) {
