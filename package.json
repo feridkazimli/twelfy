@@ -5,8 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "build": "npx tsc",
-    "startdev": "node dist/server.js",
-    "start": "pm2 start dist/server.js",
+    "startdev": "nodemon ./dist/server.js",
+    "start": "pm2 start dist/server.js --watch",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:run": "typeorm-ts-node-commonjs -d ./AppDataSource.ts migration:run",

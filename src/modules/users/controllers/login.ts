@@ -33,18 +33,19 @@ const Login = {
             expiresIn: '30s'
         });
 
+        const token = await Token.saveRefreshToken(result.id);
+        
         const refreshToken = jwt.sign({
-            userId: result.id
+            userId: result.id,
+            token: token.identifiers[0].id,
         }, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn: '30m'
+            expiresIn: '1m'
         });
-
-        await Token.saveRefreshToken({ userId: result.id, token: refreshToken });
         
         ResponseSuccess(res, {
             messages: [],
             results: { accessToken, refreshToken, ...results }
-        })
+        });
     }),
 }
 
