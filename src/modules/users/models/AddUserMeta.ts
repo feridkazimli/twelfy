@@ -1,18 +1,18 @@
 import AppDataSource from "../../../../AppDataSource";
 import { UserMetaDTO } from "../dto";
 import { Users, UserMeta } from "../entity";
-import bcrypt from 'bcrypt';
+import { genSalt, hash } from 'bcrypt';
 
 export class AddUserMeta {
     static async updateNickAndPass(data: { userId: number; nickname: string; password: string }) {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(data.password, salt);
+        const salt = await genSalt(10);
+        const hashPassword = await hash(data.password, salt);
         
         await AppDataSource.manager.createQueryBuilder()
             .update(Users)
             .set({
                 nickname: data.nickname,
-                password: hash,
+                password: hashPassword,
                 updatedAt: new Date()
             })
             .where('id = :userId', { userId: data.userId })
