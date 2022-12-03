@@ -68,7 +68,7 @@ class SecureController {
                         console.log(error);
 
                         throw new ResponseError([{
-                            [error.code]: error.message
+                            [error.code ?? error.name]: error.message
                         }], 400)
                     });
                 } catch (error: any) {

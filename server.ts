@@ -43,5 +43,6 @@ fs.readdirSync(module_dirname).forEach(function (module) {
 
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
+    console.log(process.env.NODE_ENV);
     console.log(path.join(__dirname, 'src/modules'));
 });
