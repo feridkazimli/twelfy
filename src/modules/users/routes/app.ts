@@ -9,6 +9,9 @@ router.post('/registration/set-user-meta', users.addUserMeta);
 // Login user
 router.post('/login', users.login);
 
-router.get('/fake', users.index)
+// generate access token
+router.get('/token/generate', users.generateAccessToken);
+
+// router.get('/fake', users.index)
 
 export default router;
