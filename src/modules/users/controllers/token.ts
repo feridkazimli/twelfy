@@ -4,12 +4,6 @@ import { Dummy, ResponseError, ResponseSuccess } from "../../../utils";
 import jwt from "jsonwebtoken";
 import { Token } from "../models";
 
-// TODO - yeni tokenlerin verilmesi
-// TODO - evvelki refresh token gonderilir
-// TODO - validation emeliyyati yerine yetirilir
-// TODO - yeni token bazaya yazilir
-// TODO - evvelki token bazadan silinir
-// TODO - yeni access ve refresh tokenlar generasiya olunur
 const TokenController = {
     generateAccessToken: SecureController.catchAsync(Dummy,async (req, res, next) => {
         const token = req.header('Refresh-Token');

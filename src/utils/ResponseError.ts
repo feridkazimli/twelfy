@@ -1,10 +1,10 @@
-export type Messages = {[key: string]: string} | undefined;
+export type Messages = {[key: string]: string | number} | undefined;
 
 export class ResponseError extends Error {
     code: number;
-    messages: Messages[];
+    messages: Messages[] | Messages;
 
-    constructor(messages: Messages[], code: number) {
+    constructor(messages: Messages[] | Messages, code: number) {
         super();
         this.code = code;
         this.messages = messages;

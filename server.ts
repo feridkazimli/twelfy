@@ -1,10 +1,16 @@
-import express, { Express, NextFunction, Request, Response } from 'express';
+import express, { ErrorRequestHandler, Express, NextFunction, Request, Response } from 'express';
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import 'reflect-metadata';
 import AppDataSource from './AppDataSource';
 import path from 'path';
 import fs from 'fs';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import cors, { CorsOptions } from 'cors';
+
+const host = process.env.WEB_HOST || 'http://localhost';
+const port = process.env.WEB_PORT || 3000;
 
 dotenv.config();
 // establish database connection
@@ -17,10 +23,37 @@ AppDataSource.initialize()
     })
 
 const app: Express = express();
-const host = process.env.WEB_HOST || 'http://localhost';
-const port = process.env.WEB_PORT || 3000;
+app.use(helmet())
 
-app.use(bodyParser.json());
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 5,
+    message: (req: Request, res: Response) => {
+        res.json({
+            message: 'Sorğu limitini keçmisiz, birazdan yoxlayın'
+        })
+    }
+})
+
+app.use(limiter);
+app.set('trust proxy', 1);
+
+const whitelist = ['http://localhost:1303', 'http://api.twelfy.az:1303']
+const corsOptions: CorsOptions = {
+  origin: function (origin, callback) {
+    if (origin && whitelist.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions))
+
+app.use(bodyParser.json({ 
+    limit: '1mb',
+}));
 app.use(
     bodyParser.urlencoded({
         extended: true
@@ -40,9 +73,19 @@ fs.readdirSync(module_dirname).forEach(function (module) {
         }
     }
 });
+  
+// custom error handler
+app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
+    res.status(500).send('Sistem xətası baş verdi!')
+})
+
+// custom 404
+// app.use((req, res, next) => {
+//     res.status(404).json({
+//         message: "Sorry can't find that!"
+//     })
+// })
 
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
-    console.log(process.env.NODE_ENV);
-    console.log(path.join(__dirname, 'src/modules'));
 });

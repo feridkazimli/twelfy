@@ -3,7 +3,7 @@ import { Messages } from "./ResponseError";
 import { StatusCodes } from "http-status-codes";
 
 export interface IResponseSuccess { 
-    messages: Messages[]
+    messages: Messages[] | Messages
     code?: number
     results: Array<object> | object | null
 }
