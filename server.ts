@@ -76,6 +76,7 @@ fs.readdirSync(module_dirname).forEach(function (module) {
   
 // custom error handler
 app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
+    console.log(err);
     res.status(500).send('Sistem xətası baş verdi!')
 })
 

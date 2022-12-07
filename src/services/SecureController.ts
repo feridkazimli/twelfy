@@ -53,8 +53,6 @@ class SecureController {
                         console.log(decodedToken);
                         next();
                     } catch (e) {
-                        console.log(e);
-
                         throw new ResponseError([{
                             tokenExpiredError: 'Tokenin etibarlılıq tarixi sona çatıb'
                         }], StatusCodes.UNAUTHORIZED)
@@ -65,13 +63,12 @@ class SecureController {
                 await SecureController.valid(dto as object);
 
                 await cb(req, res, next, dto).catch(error => {
-                    throw new ResponseError({ [error.code ?? error.name]: error.message }, StatusCodes.BAD_GATEWAY)
+                    throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
                 });
             } catch (error: any) {
                 res
                     .status(error.code || 400)
                     .json({
-                        code: error.code,
                         messages: error.messages,
                         stack: error.stack,
                     });
