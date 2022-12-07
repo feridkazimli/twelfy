@@ -12,15 +12,15 @@ class SecureController {
         let result: Messages[] = [];
 
         await validate(schema, { skipMissingProperties: true })
-        .then(errors => {
-            if (errors.length > 0) {
-                for (const errorItem of errors) {
-                    result.push(errorItem.constraints);
+            .then(errors => {
+                if (errors.length > 0) {
+                    for (const errorItem of errors) {
+                        result.push(errorItem.constraints);
+                    }
                 }
-            }
-        });
+            });
 
-        if(result.length > 0) {
+        if (result.length > 0) {
             throw new ResponseError(result, StatusCodes.BAD_REQUEST);
         }
     }
@@ -34,53 +34,46 @@ class SecureController {
         schema: ClassConstructor<T>,
         cb: (req: Request, res: Response, next: NextFunction, dto: T) => Promise<void>,
         authorization?: boolean): TCatchAsync {
-            return async function(req, res, next) {
-                try {
-                    if(authorization) {
-                        const Authorization = req.header('Authorization');
-                        const token = Authorization && Authorization.split(' ')[1];
+        return async function (req, res, next) {
+            try {
+                if (authorization) {
+                    const Authorization = req.header('Authorization');
+                    const token = Authorization && Authorization.split(' ')[1];
 
-                        if(!token) {
-                            throw new ResponseError([
-                                {
-                                    tokenNotFound: 'Token boş göndərilib'
-                                }
-                            ], StatusCodes.UNAUTHORIZED)
-                        }
-
-                        try {
-                            const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-                            console.log(decodedToken);
-                            next();
-                        } catch (e) {
-                            console.log(e);
-
-                            throw new ResponseError([{
-                                tokenExpiredError: 'Tokenin etibarlılıq tarixi sona çatıb'
-                            }], StatusCodes.UNAUTHORIZED)
-                        }
+                    if (!token) {
+                        throw new ResponseError([
+                            {
+                                tokenNotFound: 'Token boş göndərilib'
+                            }
+                        ], StatusCodes.UNAUTHORIZED)
                     }
 
-                    let dto: T = plainToInstance(schema, req.body);
-                    await SecureController.valid(dto as object);
-
-                    await cb(req, res, next, dto).catch(error => {
-                        console.log(error);
-
+                    try {
+                        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+                        console.log(decodedToken);
+                        next();
+                    } catch (e) {
                         throw new ResponseError([{
-                            [error.code ?? error.name]: error.message
-                        }], 400)
-                    });
-                } catch (error: any) {
-                    res
-                        .status(error.code || 400)
-                        .json({
-                            code: error.code,
-                            messages: error.messages,
-                            stack: error.stack,
-                        });
+                            tokenExpiredError: 'Tokenin etibarlılıq tarixi sona çatıb'
+                        }], StatusCodes.UNAUTHORIZED)
+                    }
                 }
+
+                let dto: T = plainToInstance(schema, req.body);
+                await SecureController.valid(dto as object);
+
+                await cb(req, res, next, dto).catch(error => {
+                    throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
+                });
+            } catch (error: any) {
+                res
+                    .status(error.code || 400)
+                    .json({
+                        messages: error.messages,
+                        stack: error.stack,
+                    });
             }
+        }
     }
 }
 

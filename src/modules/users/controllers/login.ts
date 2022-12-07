@@ -43,7 +43,7 @@ const Login = {
         });
         
         ResponseSuccess(res, {
-            messages: [],
+            messages: { text: 'Uğurlu əməliyyat' },
             results: { accessToken, refreshToken, ...results }
         });
     }),

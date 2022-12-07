@@ -10,7 +10,7 @@ const AppDataSource = new DataSource({
     username: process.env.USERDB,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    entities: [join(__dirname, 'src/modules/**/entity/*{.ts, .js}')],
+    entities: [join(__dirname, 'src/modules/**/entity/*{.ts, .js}'), join(__dirname, 'src/entity/*{.ts, .js}')],
     migrations: [join(__dirname, 'src/migration/*{.ts, .js}')],
     migrationsTableName: "migrations_table",
     logging: true,
