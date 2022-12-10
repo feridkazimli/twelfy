@@ -9,7 +9,7 @@ const GamesBefore = {
             .catch(error => {
                 throw new ResponseError([
                     {
-                        message: 'Məlumatlar alınan zaman xəta baş verdi',
+                        text: 'Məlumatlar alınan zaman xəta baş verdi',
                     }
                 ], 404)
             });
@@ -21,7 +21,7 @@ const GamesBefore = {
             }))
         } else {
             throw new ResponseError([{
-                message: `Sual sayı yetərli deyil (say: ${qog.length}, gözlənilən: 12) vəya məlumat tapılmadı`
+                text: `Sual sayı yetərli deyil (say: ${qog.length}, gözlənilən: 12) vəya məlumat tapılmadı`
             }], 400)
         }
 

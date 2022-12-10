@@ -11,14 +11,16 @@ const Registration = {
         
         if (checkActive && checkActive.active === 0) {
             throw new ResponseError([{
-                unAuthorize: 'Sorğunu yerinə yetirmək mümkün deyil'
+                text: 'Sorğunu yerinə yetirmək mümkün deyil',
+                codeType: 'unAuthorize'
             }], StatusCodes.BAD_REQUEST)
         }
         const checkNick = await UserInfo.getUserByNickName(dto.Nickname);
 
         if (checkNick) {
             throw new ResponseError([{
-                nicknameExistsError: 'Daxil edilən istifadəçi adı bazada mövcuddur'
+                text: 'Daxil edilən istifadəçi adı bazada mövcuddur',
+                codeType: 'nicknameExistsError'
             }], StatusCodes.BAD_REQUEST)
         }
 
@@ -27,7 +29,8 @@ const Registration = {
         ResponseSuccess(res, {
             messages: [
                 {
-                    register: 'Qeydiyyatınız tamamlandı'
+                    text: 'Qeydiyyatınız tamamlandı',
+                    codeType: 'register'
                 }
             ],
             results: null,

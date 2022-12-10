@@ -15,7 +15,13 @@ class SecureController {
             .then(errors => {
                 if (errors.length > 0) {
                     for (const errorItem of errors) {
-                        result.push(errorItem.constraints);
+                        const codeType = errorItem.constraints && Object.keys(errorItem.constraints);
+                        const text = errorItem.constraints && Object.values(errorItem.constraints);
+                        
+                        result.push({
+                            text: text ? text[0] : 'Məlumatları düzgün daxil edin',
+                            codeType: codeType ? codeType[0] : 'fieldError'
+                        });
                     }
                 }
             });
@@ -43,18 +49,18 @@ class SecureController {
                     if (!token) {
                         throw new ResponseError([
                             {
-                                tokenNotFound: 'Token boş göndərilib'
+                                text: 'Token boş göndərilib',
+                                codeType: 'tokenNotFound'
                             }
                         ], StatusCodes.UNAUTHORIZED)
                     }
 
                     try {
-                        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-                        console.log(decodedToken);
-                        next();
+                        const userInfo = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
                     } catch (e) {
                         throw new ResponseError([{
-                            tokenExpiredError: 'Tokenin etibarlılıq tarixi sona çatıb'
+                            text: 'Tokenin etibarlılıq tarixi sona çatıb',
+                            codeType: 'tokenExpiredError'
                         }], StatusCodes.UNAUTHORIZED)
                     }
                 }
@@ -63,9 +69,13 @@ class SecureController {
                 await SecureController.valid(dto as object);
 
                 await cb(req, res, next, dto).catch(error => {
+                    console.log(error);
+                    
                     throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
                 });
             } catch (error: any) {
+                console.log(error);
+
                 res
                     .status(error.code || 400)
                     .json({

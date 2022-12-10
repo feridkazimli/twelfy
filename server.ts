@@ -27,7 +27,7 @@ app.use(helmet())
 
 const limiter = rateLimit({
     windowMs: 10 * 60 * 1000,
-    max: 5,
+    max: 10,
     message: (req: Request, res: Response) => {
         res.json({
             message: 'Sorğu limitini keçmisiz, birazdan yoxlayın'

@@ -35,11 +35,13 @@ const Otp = {
         ResponseSuccess(res, {
             messages: [
                 {
-                    phoneAuth: 'Əməliyyat uğurla yerinə yetirildi'
+                    text: 'Əməliyyat uğurla yerinə yetirildi',
+                    codeType: 'phoneAuth'
                 }
             ],
             results: [{
                 phone: dto.Phone,
+                otp: otpCode,
                 userId: result.insertId
             }]
         });
@@ -50,13 +52,15 @@ const Otp = {
         
         if(!checkOtp) {
             throw new ResponseError([{
-                otpNotFound: 'OTP Kodu mövcud deyil'
+                text: 'OTP Kodu mövcud deyil',
+                codeType: 'otpNotFound'
             }], StatusCodes.NOT_FOUND);
         }
 
         if(checkOtp && checkOtp.otp_expiry.getTime() < Date.now()) {
             throw new ResponseError([{
-                otpExpired: 'OTP Kodu etibarlılıq tarixi sona çatıb'
+                text: 'OTP Kodu etibarlılıq tarixi sona çatıb',
+                codeType: 'otpExpired'
             }], StatusCodes.BAD_REQUEST);
         }
         
@@ -70,7 +74,8 @@ const Otp = {
         ResponseSuccess(res, {
             messages: [
                 {
-                    confirmedUser: 'İstifadəçi uğurla təsdiqləndi'
+                    text: 'İstifadəçi uğurla təsdiqləndi',
+                    codeType: 'confirmedUser'
                 }
             ],
             results: []

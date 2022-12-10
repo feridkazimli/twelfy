@@ -14,23 +14,23 @@ const Login = {
         result && await bcrypt.compare(dto.Password, result.password).then((result) => {
             if(!result) {
                 throw new ResponseError([{
-                    userNotFound: 'İstifadəçi adı vəya şifrəniz yanlışdır'
+                    text: 'İstifadəçi adı vəya şifrəniz yanlışdır',
+                    codeType: 'userNotFound' 
                 }], StatusCodes.NOT_FOUND)
             }
         });
 
         if(!result) {
             throw new ResponseError([{
-                userNotFound: 'İstifadəçi adı vəya şifrəniz yanlışdır'
+                text: 'İstifadəçi adı vəya şifrəniz yanlışdır',
+                codeType: 'userNotFound'
             }], StatusCodes.NOT_FOUND)
         }
 
         const { password, ...results } = result;
 
-        const accessToken = jwt.sign({
-            login: result.nickname
-        }, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: '30s'
+        const accessToken = jwt.sign({ ...results }, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: '10m'
         });
 
         const token = await Token.saveRefreshToken(result.id);
@@ -39,7 +39,7 @@ const Login = {
             userId: result.id,
             token: token.identifiers[0].id,
         }, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn: '1m'
+            expiresIn: '20m'
         });
         
         ResponseSuccess(res, {
