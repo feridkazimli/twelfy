@@ -69,12 +69,12 @@ class SecureController {
                 await SecureController.valid(dto as object);
 
                 await cb(req, res, next, dto).catch(error => {
-                    console.log(error);
+                    console.log('error', error);
                     
                     throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
                 });
             } catch (error: any) {
-                console.log(error);
+                console.log('error-last', error);
 
                 res
                     .status(error.code || 400)
