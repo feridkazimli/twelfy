@@ -14,14 +14,16 @@ const Login = {
         result && await bcrypt.compare(dto.Password, result.password).then((result) => {
             if(!result) {
                 throw new ResponseError([{
-                    userNotFound: 'İstifadəçi adı vəya şifrəniz yanlışdır'
+                    text: 'İstifadəçi adı vəya şifrəniz yanlışdır',
+                    codeType: 'userNotFound' 
                 }], StatusCodes.NOT_FOUND)
             }
         });
 
         if(!result) {
             throw new ResponseError([{
-                userNotFound: 'İstifadəçi adı vəya şifrəniz yanlışdır'
+                text: 'İstifadəçi adı vəya şifrəniz yanlışdır',
+                codeType: 'userNotFound'
             }], StatusCodes.NOT_FOUND)
         }
 

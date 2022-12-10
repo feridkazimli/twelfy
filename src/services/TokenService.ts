@@ -4,7 +4,10 @@ import { ResponseError } from "../utils";
 const TokenServices = {
     checkToken: (token: string | undefined) => {
         if(!token) {
-            throw new ResponseError({ tokenNotFound: 'Token boş göndərilib' }, StatusCodes.UNAUTHORIZED);
+            throw new ResponseError({ 
+                text: 'Token boş göndərilib',
+                codeType: 'tokenNotFound' 
+            }, StatusCodes.UNAUTHORIZED);
         }
     }
 }

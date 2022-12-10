@@ -1,5 +1,4 @@
 import AppDataSource from "../../../../AppDataSource";
-import { ResponseError } from "../../../utils";
 import { QuestionOfGames } from "../entity";
 
 export class GamesBeforeModel { 

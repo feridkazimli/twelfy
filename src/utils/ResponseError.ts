@@ -1,4 +1,8 @@
-export type Messages = {[key: string]: string | number} | undefined;
+export type Messages = {
+    text: string
+    title?: string | null
+    codeType?: string
+} | undefined;
 
 export class ResponseError extends Error {
     code: number;

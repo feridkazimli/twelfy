@@ -30,7 +30,10 @@ export class PhoneAuthModel {
         }
 
         if(checkOtp && checkOtp.otp_status === 2) {
-            throw new ResponseError([{ otpSendBlock: `Otp kod 3 dəfədən artıq göndərildiyi üçün bloklanmısınız.(${outInBlock}) dəqiqə sonra təkrar yoxlayın` }], StatusCodes.UNAUTHORIZED);
+            throw new ResponseError([{ 
+                text: `Otp kod 3 dəfədən artıq göndərildiyi üçün bloklanmısınız.(${outInBlock}) dəqiqə sonra təkrar yoxlayın`,
+                codeType: 'otpSendBlock'
+            }], StatusCodes.UNAUTHORIZED);
         }
 
         if(checkOtp && checkOtp.otp_retry_count >= 3) {
@@ -45,7 +48,10 @@ export class PhoneAuthModel {
                 .where('user_id = :userId', { userId })
                 .execute();
 
-            throw new ResponseError([{ otpSendBlock: 'Otp kod 3 dəfədən artıq göndərildiyi üçün bloklanmısınız. İyirmi dəqiqə sonra təkrar yoxlayın' }], StatusCodes.UNAUTHORIZED);
+            throw new ResponseError([{ 
+                text: 'Otp kod 3 dəfədən artıq göndərildiyi üçün bloklanmısınız. İyirmi dəqiqə sonra təkrar yoxlayın',
+                codeType: 'otpSendBlock' 
+            }], StatusCodes.UNAUTHORIZED);
         }
 
         const query = await AppDataSource.manager

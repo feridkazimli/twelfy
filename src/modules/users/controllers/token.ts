@@ -11,7 +11,8 @@ const TokenController = {
         if(!token) {
             throw new ResponseError([
                 {
-                    tokenNotFound: 'Token boş göndərilib'
+                    text: 'Token boş göndərilib',
+                    codeType: 'tokenNotFound'
                 }
             ], StatusCodes.UNAUTHORIZED)
         }

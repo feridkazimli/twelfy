@@ -15,7 +15,13 @@ class SecureController {
             .then(errors => {
                 if (errors.length > 0) {
                     for (const errorItem of errors) {
-                        result.push(errorItem.constraints);
+                        const codeType = errorItem.constraints && Object.keys(errorItem.constraints);
+                        const text = errorItem.constraints && Object.values(errorItem.constraints);
+                        
+                        result.push({
+                            text: text ? text[0] : 'Məlumatları düzgün daxil edin',
+                            codeType: codeType ? codeType[0] : 'fieldError'
+                        });
                     }
                 }
             });
@@ -43,7 +49,8 @@ class SecureController {
                     if (!token) {
                         throw new ResponseError([
                             {
-                                tokenNotFound: 'Token boş göndərilib'
+                                text: 'Token boş göndərilib',
+                                codeType: 'tokenNotFound'
                             }
                         ], StatusCodes.UNAUTHORIZED)
                     }
@@ -52,7 +59,8 @@ class SecureController {
                         const userInfo = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
                     } catch (e) {
                         throw new ResponseError([{
-                            tokenExpiredError: 'Tokenin etibarlılıq tarixi sona çatıb'
+                            text: 'Tokenin etibarlılıq tarixi sona çatıb',
+                            codeType: 'tokenExpiredError'
                         }], StatusCodes.UNAUTHORIZED)
                     }
                 }
