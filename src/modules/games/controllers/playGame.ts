@@ -33,11 +33,11 @@ const PlayGame = {
 
     sendAnswer: SecureController.catchAsync(GivenAnswerDTO,async (req, res, next, dto) => {
         const play = new PlayModel();
-        const save = play.saveAnswer(dto);
-
+        const save = await play.saveAnswer(dto);
+        
         ResponseSuccess(res, {
             messages: [],
-            results: save
+            results: null
         });
     }, true)
 }

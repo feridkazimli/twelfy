@@ -79,10 +79,8 @@ export class PlayModel {
                 }
             });
 
-            console.log(find);
-
             if (!find) {
-                return await AppDataSource.manager.createQueryBuilder()
+                await AppDataSource.manager.createQueryBuilder()
                     .insert()
                     .into(GivenAnswer)
                     .values({
@@ -100,13 +98,13 @@ export class PlayModel {
                         },
                         is_given: true
                     })
-                    .execute();
+                    .execute()
             }
         } catch (error) {
-            console.log(error);
+            console.log('errorerrorerror');
 
             throw new ResponseError([{
-                text: 'Cavab qeyd edilən zaman xəta baş verdi'
+                text: 'Daxil edilən sual, cavab və ya oyun məlumatı düzgün deyil'
             }], 400)
         }
     }
