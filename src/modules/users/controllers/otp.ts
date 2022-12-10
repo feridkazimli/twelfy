@@ -40,6 +40,7 @@ const Otp = {
             ],
             results: [{
                 phone: dto.Phone,
+                otp: otpCode,
                 userId: result.insertId
             }]
         });

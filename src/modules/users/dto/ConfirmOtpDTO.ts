@@ -1,6 +1,6 @@
 import { IsNumber, IsNotEmpty } from 'class-validator'
 
-export class ConfirmOtpDTO {    
+export class ConfirmOtpDTO {
     @IsNotEmpty()
     @IsNumber()
     private userId: number;

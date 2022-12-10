@@ -21,7 +21,7 @@ export class PhoneAuthModel {
             .createQueryBuilder()
             .update(UserOtp)
             .set({
-                otp_expiry: null,
+                otp_expiry: addMinutes(new Date(), 5),
                 otp_status: 0,
                 otp_retry_count: 0
             })

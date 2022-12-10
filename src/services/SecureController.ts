@@ -49,9 +49,7 @@ class SecureController {
                     }
 
                     try {
-                        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-                        console.log(decodedToken);
-                        next();
+                        const userInfo = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
                     } catch (e) {
                         throw new ResponseError([{
                             tokenExpiredError: 'Tokenin etibarlılıq tarixi sona çatıb'
@@ -63,9 +61,13 @@ class SecureController {
                 await SecureController.valid(dto as object);
 
                 await cb(req, res, next, dto).catch(error => {
+                    console.log(error);
+                    
                     throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
                 });
             } catch (error: any) {
+                console.log(error);
+
                 res
                     .status(error.code || 400)
                     .json({

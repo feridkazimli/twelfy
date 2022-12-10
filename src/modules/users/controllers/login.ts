@@ -27,10 +27,8 @@ const Login = {
 
         const { password, ...results } = result;
 
-        const accessToken = jwt.sign({
-            login: result.nickname
-        }, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: '30s'
+        const accessToken = jwt.sign({ ...results }, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: '10m'
         });
 
         const token = await Token.saveRefreshToken(result.id);
@@ -39,7 +37,7 @@ const Login = {
             userId: result.id,
             token: token.identifiers[0].id,
         }, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn: '1m'
+            expiresIn: '20m'
         });
         
         ResponseSuccess(res, {
