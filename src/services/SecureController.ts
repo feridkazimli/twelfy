@@ -17,7 +17,7 @@ class SecureController {
                     for (const errorItem of errors) {
                         const codeType = errorItem.constraints && Object.keys(errorItem.constraints);
                         const text = errorItem.constraints && Object.values(errorItem.constraints);
-                        
+
                         result.push({
                             text: text ? text[0] : 'Məlumatları düzgün daxil edin',
                             codeType: codeType ? codeType[0] : 'fieldError'
@@ -39,7 +39,8 @@ class SecureController {
     catchAsync<T>(
         schema: ClassConstructor<T>,
         cb: (req: Request, res: Response, next: NextFunction, dto: T) => Promise<void>,
-        authorization?: boolean): TCatchAsync {
+        authorization?: boolean
+    ): TCatchAsync {
         return async function (req, res, next) {
             try {
                 if (authorization) {
@@ -70,7 +71,7 @@ class SecureController {
 
                 await cb(req, res, next, dto).catch(error => {
                     console.log('error', error);
-                    
+
                     throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
                 });
             } catch (error: any) {
