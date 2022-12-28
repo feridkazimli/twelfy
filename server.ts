@@ -87,6 +87,10 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
 //     })
 // })
 
+process.on('uncaughtException', function (err) {
+    console.log(err);
+});
+
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
 });
