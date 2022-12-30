@@ -90,7 +90,7 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
 
 const options = {
     key: fs.readFileSync(`${process.env.CERTDIR}/${process.env.CERTDOMAIN}_2022-12-28-22-11_04.key`),
-    cert: fs.readFileSync(`${process.env.CERTDIR}/${process.env.CERTDOMAIN}_2022-12-28-22-11_04.cert`)
+    cert: fs.readFileSync(`${process.env.CERTDIR}/${process.env.CERTDOMAIN}_2022-12-28-22-11_04.crt`)
 };
 
 process.on('uncaughtException', function (err) {
