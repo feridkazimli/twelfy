@@ -8,6 +8,7 @@ import fs from 'fs';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors, { CorsOptions } from 'cors';
+import http from "http";
 import https from "https";
 
 const host = process.env.WEB_HOST || 'http://localhost';
@@ -97,8 +98,9 @@ process.on('uncaughtException', function (err) {
     console.log(err);
 });
 
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at ${host}:${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
+// });
 
+http.createServer(app).listen(port)
 https.createServer(options, app).listen(443)
