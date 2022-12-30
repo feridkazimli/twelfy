@@ -101,4 +101,4 @@ app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
 });
 
-https.createServer(options, app).listen(4433)
+https.createServer(options, app).listen(443)
