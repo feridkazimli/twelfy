@@ -2,6 +2,8 @@ declare namespace NodeJS {
     interface ProcessEnv {
         WEB_PORT: string
         WEB_HOST: string
+        CERTDIR: string
+        CERTDOMAIN: string
         USERDB: string
         PASSWORD: string
         HOST: string
