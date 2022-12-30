@@ -98,9 +98,13 @@ process.on('uncaughtException', function (err) {
     console.log(err);
 });
 
+process.on('SIGTERM', function (err) {
+    console.log(err);
+});
+
 // app.listen(port, () => {
 //     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
 // });
 
 http.createServer(app).listen(port)
-https.createServer(options, app).listen(443)
+https.createServer(options, app).listen(1303)
