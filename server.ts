@@ -8,6 +8,7 @@ import fs from 'fs';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors, { CorsOptions } from 'cors';
+import https from "https";
 
 const host = process.env.WEB_HOST || 'http://localhost';
 const port = process.env.WEB_PORT || 3000;
@@ -87,6 +88,11 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
 //     })
 // })
 
+const options = {
+    key: fs.readFileSync(`${process.env.CERTDIR}/${process.env.CERTDOMAIN}/privkey.pem`),
+    cert: fs.readFileSync(`${process.env.CERTDIR}/${process.env.CERTDOMAIN}/fullchain.pem`)
+};
+
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
@@ -94,3 +100,5 @@ process.on('uncaughtException', function (err) {
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at ${host}:${port}`);
 });
+
+https.createServer(options, app).listen(443)
