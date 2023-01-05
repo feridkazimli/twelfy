@@ -11,7 +11,7 @@ class SecureController {
     static async valid(schema: object) {
         let result: Messages[] = [];
 
-        await validate(schema, { skipMissingProperties: true })
+        await validate(schema, { skipMissingProperties: false })
             .then(errors => {
                 if (errors.length > 0) {
                     for (const errorItem of errors) {
@@ -70,13 +70,9 @@ class SecureController {
                 await SecureController.valid(dto as object);
 
                 await cb(req, res, next, dto).catch(error => {
-                    console.log('error', error);
-
-                    throw new ResponseError(error, StatusCodes.BAD_GATEWAY)
+                    throw new ResponseError(error, StatusCodes.BAD_REQUEST)
                 });
             } catch (error: any) {
-                console.log('error-last', error);
-
                 res
                     .status(error.code || 400)
                     .json({
