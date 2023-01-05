@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class UserMetaDTO {
     @IsNotEmpty()
@@ -31,7 +31,6 @@ export class UserMetaDTO {
         return this.lastName;
     }
 
-    @IsNotEmpty()
     private father: string;
     public get Father(): string {
         return this.father;
