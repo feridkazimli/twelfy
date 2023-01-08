@@ -8,7 +8,7 @@ router.post('/registration/confirm-otp-code', users.confirmOtpCode);
 router.post('/registration/set-user-meta', users.addUserMeta);
 // Login user
 router.post('/login', users.login);
-
+router.post('/update-password', users.updatePassword);
 // generate access token
 router.get('/token/generate', users.generateAccessToken);
 

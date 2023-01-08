@@ -2,6 +2,16 @@ import AppDataSource from "../../../../AppDataSource";
 import { UserMeta, Users } from "../entity";
 
 export class UserInfo {
+    static async updatePasswordByUserId(data: { userId: number; password: string; }){
+        await AppDataSource.manager.createQueryBuilder()
+            .update(Users)
+            .set({
+                password: data.password
+            })
+            .where('id =:userId', { userId: data.userId })
+            .execute();
+    }
+    
     static async getUserByNickName(nickname: string) {
         const result = await AppDataSource.manager.findOne(Users, {
             where: {

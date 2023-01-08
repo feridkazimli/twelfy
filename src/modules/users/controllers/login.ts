@@ -1,6 +1,6 @@
 import SecureController from "../../../services/SecureController";
-import { ResponseError, ResponseSuccess } from "../../../utils";
-import { LoginDTO } from "../dto";
+import { Dummy, ResponseError, ResponseSuccess } from "../../../utils";
+import { LoginDTO, UpdatePasswordDTO } from "../dto";
 import { UserInfo } from "../models";
 import { StatusCodes } from 'http-status-codes'
 import bcrypt from 'bcrypt';
@@ -8,6 +8,20 @@ import jwt from 'jsonwebtoken';
 import { Token } from "../models/Token";
 
 const Login = {
+    updatePassword: SecureController.catchAsync(UpdatePasswordDTO, async (req, res, next, dto) => {
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(dto.Password, salt);
+
+        await UserInfo.updatePasswordByUserId({
+            userId: dto.UserId,
+            password: hashPassword
+        });
+
+        ResponseSuccess(res, {
+            messages: { text: 'Uğurlu əməliyyat' },
+            results: null,
+        });
+    }),
     login: SecureController.catchAsync(LoginDTO, async (req, res, next, dto) => {
         const result = await UserInfo.getAllUserByNickName(dto.Nickname);
 
